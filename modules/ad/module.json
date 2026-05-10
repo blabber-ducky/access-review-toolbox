@@ -1,0 +1,22 @@
+{
+  "id": "ad",
+  "label": "Active Directory",
+  "dumpFolder": "AD",
+  "scriptPath": "scripts/ad/collect.ps1",
+  "tabs": [
+    { "id": "users",     "label": "Users",     "dataFile": "users.json" },
+    { "id": "computers", "label": "Computers",  "dataFile": "computers.json" },
+    { "id": "groups",    "label": "Groups",     "dataFile": "groups.json" },
+    { "id": "ous",       "label": "OUs",        "dataFile": "ous.json" },
+    { "id": "findings",  "label": "Findings",   "dataFile": null }
+  ],
+  "findingTypes": [
+    { "id": "stale-enabled",     "label": "Enabled users with no login ≥ 90 days",    "severity": "high" },
+    { "id": "long-disabled",     "label": "Disabled users ≥ 180 days",                "severity": "medium" },
+    { "id": "never-expire-acct", "label": "Accounts set to never expire",              "severity": "medium" },
+    { "id": "never-expire-pwd",  "label": "Accounts with password set to never expire","severity": "medium" },
+    { "id": "empty-groups",      "label": "Groups with no members",                    "severity": "low" },
+    { "id": "empty-ous",         "label": "OUs with no objects",                       "severity": "low" }
+  ],
+  "configKeys": []
+}

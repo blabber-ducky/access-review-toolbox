@@ -1,0 +1,3 @@
+@echo off
+echo Starting Access Review Toolbox...
+powershell.exe -ExecutionPolicy Bypass -NoProfile -File scripts\server.ps1

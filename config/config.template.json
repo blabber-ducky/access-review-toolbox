@@ -1,0 +1,17 @@
+{
+  "_comment": "Copy this file to config.json, fill in your values, then load it from the app on launch. config.json is gitignored — never commit it.",
+  "fortigate": {
+    "host": "https://192.168.1.1",
+    "apiToken": "",
+    "verifySsl": false
+  },
+  "f5": {
+    "host": "https://192.168.1.2",
+    "username": "",
+    "password": "",
+    "verifySsl": false
+  },
+  "ad": {
+    "_comment": "AD uses the current Windows session credentials. No fields required."
+  }
+}

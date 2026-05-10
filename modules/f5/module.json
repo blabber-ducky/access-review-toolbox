@@ -1,0 +1,17 @@
+{
+  "id": "f5",
+  "label": "F5 BIG-IP (WAF)",
+  "dumpFolder": "F5",
+  "scriptPath": "scripts/f5/collect.ps1",
+  "tabs": [
+    { "id": "security-policies", "label": "Security Policies", "dataFile": "security_policies.json" },
+    { "id": "pools",             "label": "Pools",             "dataFile": "pools.json" },
+    { "id": "findings",          "label": "Findings",          "dataFile": null }
+  ],
+  "findingTypes": [
+    { "id": "learning-mode",    "label": "Policies in learning mode",                   "severity": "high" },
+    { "id": "not-owasp-10",     "label": "Policies not at OWASP compliance score 10/10","severity": "high" },
+    { "id": "pools-no-policy",  "label": "Pools with no associated security policy",    "severity": "medium" }
+  ],
+  "configKeys": ["f5.host", "f5.username", "f5.password"]
+}

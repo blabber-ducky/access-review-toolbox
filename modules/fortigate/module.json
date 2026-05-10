@@ -1,0 +1,17 @@
+{
+  "id": "fortigate",
+  "label": "Fortigate Firewall",
+  "dumpFolder": "Fortigate",
+  "scriptPath": "scripts/fortigate/collect.ps1",
+  "tabs": [
+    { "id": "policies", "label": "Policies", "dataFile": "policies.json" },
+    { "id": "findings", "label": "Findings", "dataFile": null }
+  ],
+  "findingTypes": [
+    { "id": "no-traffic",    "label": "Policies with no data transferred",    "severity": "medium" },
+    { "id": "overlapping",   "label": "Potential overlapping policies",        "severity": "high" },
+    { "id": "internet",      "label": "Policies allowing traffic to internet", "severity": "high" },
+    { "id": "any-any",       "label": "Policies with any-any rules",           "severity": "high" }
+  ],
+  "configKeys": ["fortigate.host", "fortigate.apiToken"]
+}
