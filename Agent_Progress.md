@@ -6,9 +6,7 @@ Live tracking of in-progress feature work. Updated during development, not after
 
 ## Current Work
 
-**Phase 1 — Project Skeleton** ✅ Complete
-
-Scaffolded all folders, .gitignore, CHANGELOG.md, module manifests, config template, and placeholder source files.
+**Phases 2–7 implemented.** Application is functional end-to-end for the AD module. Fortigate and F5 JS modules are complete; their PowerShell collectors are stubbed (Phase 8–9).
 
 ---
 
@@ -17,6 +15,12 @@ Scaffolded all folders, .gitignore, CHANGELOG.md, module manifests, config templ
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 1 | Project skeleton and git foundation | ✅ Done |
+| 2 | PowerShell HTTP server (`scripts/server.ps1`) | ✅ Done |
+| 3 | App shell UI — CSS design system, `ui.js`, `router.js` | ✅ Done |
+| 4 | Module registration — `app.js`, `config.js`, `dump-manager.js`, `ps-bridge.js` | ✅ Done |
+| 5 | AD PowerShell collection script | ✅ Done |
+| 6 | Table renderer + AD module JS (tabs + findings) | ✅ Done |
+| 7 | Findings engine + findings card UI | ✅ Done |
 
 ---
 
@@ -24,11 +28,5 @@ Scaffolded all folders, .gitignore, CHANGELOG.md, module manifests, config templ
 
 | Phase | Description |
 |-------|-------------|
-| 2 | PowerShell HTTP server (`scripts/server.ps1`) + `Launch.bat` |
-| 3 | App shell UI — layout, sidebar, tabs, modal, toast |
-| 4 | Module registration system + config + dump manager |
-| 5 | AD PowerShell collection script |
-| 6 | Table renderer + AD module UI |
-| 7 | Findings engine + findings UI |
-| 8 | Fortigate module (PS + JS) |
-| 9 | F5 BIG-IP module (PS + JS) |
+| 8 | Fortigate PowerShell collector (`scripts/fortigate/collect.ps1`) |
+| 9 | F5 BIG-IP PowerShell collector (`scripts/f5/collect.ps1`) |

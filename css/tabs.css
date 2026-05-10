@@ -1,0 +1,72 @@
+/* ── Tab bar ────────────────────────────────────────────────────────────── */
+.tab-btn {
+  padding: 14px 18px 12px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s;
+  position: relative;
+}
+.tab-btn:hover { color: var(--color-primary); }
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ── Tab panels ─────────────────────────────────────────────────────────── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Module welcome (no dump loaded) ────────────────────────────────────── */
+#welcome-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - var(--topbar-height) - 52px);
+  gap: 16px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+#welcome-panel h2 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  font-weight: 500;
+}
+#welcome-panel p { max-width: 400px; line-height: 1.6; }
+
+/* ── Progress bar (dump creation) ───────────────────────────────────────── */
+#progress-bar-wrap {
+  display: none;
+  padding: 12px 20px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  align-items: center;
+  gap: 12px;
+}
+#progress-bar-wrap.visible { display: flex; }
+
+#progress-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+#progress-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 3px;
+  width: 0;
+  transition: width .3s ease;
+}
+#progress-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  min-width: 160px;
+}

@@ -17,8 +17,8 @@
       <div id="app-title">Access Review Toolbox</div>
       <nav id="module-list"></nav>
       <div id="config-section">
-        <button id="btn-load-config">Load Config</button>
-        <button id="btn-new-config">New Config</button>
+        <button id="btn-load-config" class="sidebar-btn">Load Config</button>
+        <button id="btn-new-config" class="sidebar-btn">New Config</button>
         <div id="config-status"></div>
       </div>
     </aside>
@@ -30,6 +30,11 @@
         <button id="btn-create-dump" disabled>Create Dump</button>
       </header>
 
+      <div id="progress-bar-wrap">
+        <div id="progress-bar-track"><div id="progress-bar-fill"></div></div>
+        <span id="progress-label"></span>
+      </div>
+
       <div id="tab-bar"></div>
       <div id="tab-panels"></div>
     </main>
@@ -40,8 +45,8 @@
       <div id="modal-title"></div>
       <div id="modal-body"></div>
       <div id="modal-footer">
-        <button id="modal-cancel">Cancel</button>
-        <button id="modal-confirm">Save</button>
+        <button id="modal-cancel" class="btn-secondary">Cancel</button>
+        <button id="modal-confirm" class="btn-primary">Save</button>
       </div>
     </div>
   </div>
