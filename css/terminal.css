@@ -1,0 +1,112 @@
+/* ── Debug terminal panel ───────────────────────────────────────────────── */
+#terminal-panel {
+  height: 0;
+  overflow: hidden;
+  background: #1a1b1e;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  transition: height .22s ease;
+  flex-shrink: 0;
+}
+#terminal-panel.open { height: 260px; }
+
+/* ── Terminal toolbar ───────────────────────────────────────────────────── */
+#terminal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: #111213;
+  border-bottom: 1px solid #2a2b2e;
+  flex-shrink: 0;
+}
+#terminal-toolbar .term-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+#terminal-toolbar .term-status {
+  font-size: 11px;
+  color: #4ade80;
+  margin-left: 6px;
+}
+#terminal-toolbar .term-status.idle { color: #6b7280; }
+
+#btn-term-clear {
+  margin-left: auto;
+  padding: 3px 10px;
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid #374151;
+  border-radius: 3px;
+  color: #6b7280;
+  cursor: pointer;
+}
+#btn-term-clear:hover { color: #d1d5db; border-color: #6b7280; }
+
+/* ── Terminal output area ───────────────────────────────────────────────── */
+#terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+}
+#terminal-output::-webkit-scrollbar { width: 5px; }
+#terminal-output::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
+
+.term-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  padding: 1px 14px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.term-line:hover { background: rgba(255,255,255,.03); }
+
+.term-time {
+  color: #374151;
+  font-size: 10px;
+  min-width: 64px;
+  flex-shrink: 0;
+  padding-right: 8px;
+}
+.term-src {
+  color: #4b5563;
+  font-size: 10px;
+  min-width: 90px;
+  flex-shrink: 0;
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.term-text { color: #d1d5db; }
+
+/* ── Level colours ──────────────────────────────────────────────────────── */
+.term-line.level-progress .term-text { color: #60a5fa; }
+.term-line.level-done     .term-text { color: #4ade80; font-weight: 600; }
+.term-line.level-error    .term-text { color: #f87171; font-weight: 600; }
+.term-line.level-warn     .term-text { color: #fbbf24; }
+.term-line.level-system   .term-text { color: #6b7280; font-style: italic; }
+
+/* ── Toggle button (in top bar) ─────────────────────────────────────────── */
+#btn-toggle-terminal {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+#btn-toggle-terminal:hover { background: #1a1b1e; color: #d1d5db; }
+#btn-toggle-terminal.active { background: #1a1b1e; color: #4ade80; border-color: #374151; }

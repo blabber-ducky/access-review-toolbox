@@ -10,15 +10,19 @@
   <link rel="stylesheet" href="css/table.css" />
   <link rel="stylesheet" href="css/findings.css" />
   <link rel="stylesheet" href="css/modal.css" />
+  <link rel="stylesheet" href="css/terminal.css" />
 </head>
 <body>
   <div id="app">
     <aside id="sidebar">
-      <div id="app-title">Access Review Toolbox</div>
+      <div id="app-title">
+        Access Review Toolbox
+        <small>v1.0</small>
+      </div>
       <nav id="module-list"></nav>
       <div id="config-section">
         <button id="btn-load-config" class="sidebar-btn">Load Config</button>
-        <button id="btn-new-config" class="sidebar-btn">New Config</button>
+        <button id="btn-new-config"  class="sidebar-btn">New Config</button>
         <div id="config-status"></div>
       </div>
     </aside>
@@ -28,6 +32,7 @@
         <div id="dump-info">No dump loaded</div>
         <select id="dump-selector" disabled><option>-- No dumps --</option></select>
         <button id="btn-create-dump" disabled>Create Dump</button>
+        <button id="btn-toggle-terminal" title="Toggle debug terminal">&gt;_ Console</button>
       </header>
 
       <div id="progress-bar-wrap">
@@ -37,6 +42,16 @@
 
       <div id="tab-bar"></div>
       <div id="tab-panels"></div>
+
+      <!-- Debug terminal panel (slide-up from bottom) -->
+      <div id="terminal-panel">
+        <div id="terminal-toolbar">
+          <span class="term-title">PS Console</span>
+          <span id="terminal-status" class="term-status idle">idle</span>
+          <button id="btn-term-clear">Clear</button>
+        </div>
+        <div id="terminal-output"></div>
+      </div>
     </main>
   </div>
 
@@ -61,6 +76,7 @@
   <script src="js/ps-bridge.js"></script>
   <script src="js/table-renderer.js"></script>
   <script src="js/findings-engine.js"></script>
+  <script src="js/terminal.js"></script>
 
   <!-- Module JS -->
   <script src="js/modules/ad.js"></script>

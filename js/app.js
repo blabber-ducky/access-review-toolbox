@@ -9,21 +9,18 @@
   });
 
   function _init() {
-    // Fetch all module manifests from the server
     fetch('/api/modules')
       .then(function (r) { return r.json(); })
       .then(function (manifests) {
-        // Merge server manifests into pre-registered module objects
         manifests.forEach(function (manifest) {
           var existing = MODULE_REGISTRY.find(function (m) { return m.id === manifest.id; });
           if (existing) {
-            // Copy manifest fields onto the registered entry
             Object.keys(manifest).forEach(function (k) {
               if (existing[k] === undefined) existing[k] = manifest[k];
             });
-            // Overwrite tabs/findingTypes from manifest (authoritative)
             existing.tabs         = manifest.tabs;
             existing.findingTypes = manifest.findingTypes;
+            existing.scripts      = manifest.scripts;
           }
         });
 
@@ -31,10 +28,8 @@
         _wireTopBar();
         _wireTabs();
 
-        // Restore last config
         Config.tryRestoreLastConfig().catch(function () {});
 
-        // If modules exist, auto-select the first
         if (MODULE_REGISTRY.length > 0) {
           Router.setActiveModule(MODULE_REGISTRY[0].id);
         }
@@ -45,16 +40,11 @@
   }
 
   // ── Sidebar ────────────────────────────────────────────────────────────────
-  var MODULE_ICONS = {
-    ad:        '🖥',
-    fortigate: '🔥',
-    f5:        '⚖'
-  };
+  var MODULE_ICONS = { ad: '🖥', fortigate: '🔥', f5: '⚖' };
 
   function _buildSidebar() {
     var nav = document.getElementById('module-list');
     nav.innerHTML = '';
-
     MODULE_REGISTRY.forEach(function (mod) {
       var btn = document.createElement('button');
       btn.className        = 'module-item';
@@ -62,14 +52,12 @@
       btn.innerHTML =
         '<span class="module-icon">' + (MODULE_ICONS[mod.id] || '📋') + '</span>' +
         '<span>' + UI.escapeHtml(mod.label) + '</span>';
-      btn.addEventListener('click', function () {
-        Router.setActiveModule(mod.id);
-      });
+      btn.addEventListener('click', function () { Router.setActiveModule(mod.id); });
       nav.appendChild(btn);
     });
   }
 
-  // ── Top bar wiring ─────────────────────────────────────────────────────────
+  // ── Top bar ────────────────────────────────────────────────────────────────
   function _wireTopBar() {
     var btnCreate = document.getElementById('btn-create-dump');
     btnCreate.addEventListener('click', function () {
@@ -79,31 +67,76 @@
       var configPath = Config.getConfigPath();
       var mod        = MODULE_REGISTRY.find(function (m) { return m.id === moduleId; });
 
-      // If module needs config keys, ensure config is loaded
       if (mod && mod.configKeys && mod.configKeys.length > 0 && !configPath) {
         UI.toast('Please load a config file before creating a dump', 'warn');
         return;
       }
 
-      btnCreate.disabled = true;
+      btnCreate.disabled    = true;
       btnCreate.textContent = 'Collecting...';
+      Terminal.appendSystemLine('Starting dump for module: ' + moduleId);
 
       PSBridge.startDump(moduleId, configPath || '')
+        .then(function (dumpPath) {
+          UI.toast('Dump complete — running review analysis...', 'info');
+          Terminal.appendSystemLine('Dump complete. Starting review...');
+          return _runReview(moduleId, dumpPath, configPath || '');
+        })
         .then(function () {
-          UI.toast('Dump complete', 'success');
+          UI.toast('Dump and review complete', 'success');
           DumpManager.refreshDumpList(moduleId);
         })
         .catch(function (e) {
-          UI.toast('Collection failed: ' + e.message, 'error');
+          UI.toast('Error: ' + e.message, 'error');
+          // Still try to refresh dump list even if review failed
+          var mod2 = MODULE_REGISTRY.find(function (m) { return m.id === moduleId; });
+          if (mod2) DumpManager.refreshDumpList(moduleId);
         })
         .finally(function () {
-          btnCreate.disabled = false;
+          btnCreate.disabled    = false;
           btnCreate.textContent = 'Create Dump';
         });
     });
   }
 
-  // ── Tab wiring via Router events ───────────────────────────────────────────
+  // ── Run review script after dump ───────────────────────────────────────────
+  function _runReview(moduleId, dumpPath, configPath) {
+    var mod = MODULE_REGISTRY.find(function (m) { return m.id === moduleId; });
+    // Only run if the module has a review script defined
+    if (!mod || !mod.scripts || !mod.scripts.review) {
+      return Promise.resolve();
+    }
+
+    UI.showProgress(0, 'Running review analysis...');
+    return fetch('/api/review', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ module: moduleId, dumpPath: dumpPath, configPath: configPath })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+      if (res.status !== 'started') throw new Error(res.error || 'Review failed to start');
+      return _pollJob(res.jobId, 'Review');
+    })
+    .finally(function () { UI.hideProgress(); });
+  }
+
+  function _pollJob(jobId, label) {
+    return new Promise(function (resolve, reject) {
+      var timer = setInterval(function () {
+        fetch('/api/dump/status?jobId=' + encodeURIComponent(jobId))
+          .then(function (r) { return r.json(); })
+          .then(function (res) {
+            if (res.progress) UI.showProgress(res.progress, (label || '') + ': ' + (res.message || ''));
+            if (res.status === 'done')  { clearInterval(timer); resolve(res.dumpPath); }
+            if (res.status === 'error') { clearInterval(timer); reject(new Error(res.message)); }
+          })
+          .catch(function (e) { clearInterval(timer); reject(e); });
+      }, 1500);
+    });
+  }
+
+  // ── Tab wiring ─────────────────────────────────────────────────────────────
   function _wireTabs() {
     Router.onModuleChange(function (moduleId) {
       var mod = MODULE_REGISTRY.find(function (m) { return m.id === moduleId; });
@@ -112,10 +145,8 @@
       Router.updateSidebarActive(moduleId);
       document.getElementById('btn-create-dump').disabled = false;
 
-      // Render tab bar
       Router.renderTabBar(mod.tabs, mod.tabs[0].id);
 
-      // Build empty panel containers
       var panelsEl = document.getElementById('tab-panels');
       panelsEl.innerHTML = '';
       mod.tabs.forEach(function (tab) {
@@ -125,7 +156,6 @@
         panelsEl.appendChild(panel);
       });
 
-      // Refresh dump list and activate first tab
       DumpManager.refreshDumpList(moduleId).then(function () {
         Router.setActiveTab(mod.tabs[0].id);
       });
@@ -143,16 +173,11 @@
 
       if (tabId === 'findings') {
         FindingsEngine.render(moduleId, dumpData);
-      } else {
-        // Ask the module to render the tab
-        var containerId = 'panel-' + tabId;
-        if (mod.renderTab) {
-          mod.renderTab(tabId, dumpData, containerId);
-        }
+      } else if (mod.renderTab) {
+        mod.renderTab(tabId, dumpData, 'panel-' + tabId);
       }
     });
 
-    // Re-render active tab when a new dump loads
     DumpManager.onDumpLoaded(function (dump, dumpData, moduleId) {
       var tabId = Router.getActiveTab();
       if (!tabId) return;

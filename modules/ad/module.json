@@ -2,7 +2,12 @@
   "id": "ad",
   "label": "Active Directory",
   "dumpFolder": "AD",
-  "scriptPath": "scripts/ad/collect.ps1",
+  "scriptPath": "scripts/ad/dump.ps1",
+  "scripts": {
+    "dump":    "scripts/ad/dump.ps1",
+    "review":  "scripts/ad/review.ps1",
+    "refresh": "scripts/ad/refresh.ps1"
+  },
   "tabs": [
     { "id": "users",     "label": "Users",     "dataFile": "users.json" },
     { "id": "computers", "label": "Computers",  "dataFile": "computers.json" },

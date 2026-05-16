@@ -6,7 +6,7 @@ Live tracking of in-progress feature work. Updated during development, not after
 
 ## Current Work
 
-**Phases 2–7 implemented.** Application is functional end-to-end for the AD module. Fortigate and F5 JS modules are complete; their PowerShell collectors are stubbed (Phase 8–9).
+All planned phases complete. Post-phase features implemented: debug terminal, AD script split, PS-backed findings refresh.
 
 ---
 
@@ -21,6 +21,17 @@ Live tracking of in-progress feature work. Updated during development, not after
 | 5 | AD PowerShell collection script | ✅ Done |
 | 6 | Table renderer + AD module JS (tabs + findings) | ✅ Done |
 | 7 | Findings engine + findings card UI | ✅ Done |
+
+## Post-Phase Features
+
+| Feature | Files | Status |
+|---------|-------|--------|
+| Debug terminal panel | `css/terminal.css`, `js/terminal.js`, `index.html` | ✅ Done |
+| Server log buffer + `/api/logs` | `scripts/server.ps1` | ✅ Done |
+| AD script split (dump / review / refresh) | `scripts/ad/dump.ps1`, `review.ps1`, `refresh.ps1` | ✅ Done |
+| `/api/review` + `/api/refresh` endpoints | `scripts/server.ps1` | ✅ Done |
+| PS-backed findings with `findings.json` | `js/findings-engine.js`, `js/modules/ad.js` | ✅ Done |
+| Auto-review after dump | `js/app.js` | ✅ Done |
 
 ---
 
