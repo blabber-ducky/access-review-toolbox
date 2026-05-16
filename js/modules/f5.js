@@ -82,12 +82,14 @@
     var referencedPools = new Set();
     policies.forEach(function (p) {
       var refs = Array.isArray(p.pools) ? p.pools : (p.virtualServers || []);
-      refs.forEach(function (r) { referencedPools.add(r); });
+      refs.forEach(function (r) {
+        referencedPools.add(r);
+        referencedPools.add(r.replace(/^\/[^/]+\//, ''));
+      });
     });
     var unprotectedPools = pools.filter(function (pool) {
-      // Normalize: strip /Common/ prefix for comparison
-      var name = pool.name.replace(/^\/[^/]+\//, '');
-      return !referencedPools.has(pool.name) && !referencedPools.has(name);
+      var bare = pool.name.replace(/^\/[^/]+\//, '');
+      return !referencedPools.has(pool.name) && !referencedPools.has(bare);
     });
     results.push({
       findingTypeId: 'pools-no-policy',
