@@ -26,3 +26,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Refresh button triggers `POST /api/refresh`, polls for completion, then reloads `findings.json`
 - `app.js` auto-runs review script after every successful dump (shows "Running review analysis..." progress)
 - `ad.js` exposes `columnDefs` object keyed by finding type ID — used by findings-engine when rendering PS-computed results
+
+### Added (test suite)
+- 51 Pester 5 tests: `tests/ps/ad-review.Tests.ps1` (all 6 AD findings, empty-dump, error-exit) and `tests/ps/ad-dump.Tests.ps1` (file schema, manifest, refresh delegation)
+- 93 Node.js tests (node:test): `tests/js/ad.test.js`, `tests/js/fortigate.test.js`, `tests/js/f5.test.js`, `tests/js/table-renderer.test.js` — cover evaluate() logic for all 3 modules and all date helper functions
+- Test runners: `tests/ps/Run-Tests.ps1` (Pester) and `tests/js/run-tests.js` (Node.js)
+
+### Fixed
+- `js/modules/f5.js`: `pools-no-policy` finding now correctly cross-matches `/Common/pool-x` policy references against bare `pool-x` pool names (and vice versa) by normalising both sides of the lookup

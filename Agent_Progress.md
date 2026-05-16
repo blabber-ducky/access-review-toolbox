@@ -32,6 +32,7 @@ All planned phases complete. Post-phase features implemented: debug terminal, AD
 | `/api/review` + `/api/refresh` endpoints | `scripts/server.ps1` | ✅ Done |
 | PS-backed findings with `findings.json` | `js/findings-engine.js`, `js/modules/ad.js` | ✅ Done |
 | Auto-review after dump | `js/app.js` | ✅ Done |
+| Test suite (Pester + Node.js) | `tests/ps/`, `tests/js/` | ✅ Done — 51 PS + 93 JS tests, all passing |
 
 ---
 
